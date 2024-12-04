@@ -8,6 +8,10 @@ class Framework(Enum):
     DIFFUSERS = "diffusers"
 
 
+class Task(Enum):
+    ASR = "automatic-speech-recognition"
+
+
 class InferenceRequest(BaseModel):
     inputs: Union[str, List[str], object]
     parameters: Optional[Dict[str, Any]] = None

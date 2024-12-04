@@ -1,7 +1,7 @@
 FROM python:3.12
 
-RUN pip install torch --index-url https://download.pytorch.org/whl/cpu
-RUN pip install diffusers transformers fastapi uvicorn accelerate>=0.26.0
+RUN pip install diffusers "transformers[torch]" fastapi uvicorn accelerate>=0.26.0
+RUN apt-get update && apt-get install -y ffmpeg
 
 COPY app /app
 
