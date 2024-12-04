@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import traceback
 from fastapi.responses import JSONResponse
 from api_models import InferenceRequest, Task
 import logging
@@ -43,15 +44,18 @@ def infer(request: InferenceRequest):
             else:
                 resp = model.pipeline(request.inputs, **request.parameters)
         except Exception as e:
-            return JSONResponse(status_code=400, content={"error message": str(e)})
+            logger.error("Exception occurred: %s", traceback.format_exc())
+            return JSONResponse(status_code=500, content={"error message": "An internal error has occurred."})
     elif isinstance(request.inputs, list):
         try:
             resp = model.pipeline(*request.inputs, **request.parameters)
         except Exception as e:
-            return JSONResponse(status_code=400, content={"error message": str(e)})
+            logger.error("Exception occurred: %s", traceback.format_exc())
+            return JSONResponse(status_code=500, content={"error message": "An internal error has occurred."})
     elif isinstance(request.inputs, dict):
         try:
             resp = model.pipeline(**request.inputs, **request.parameters)
         except Exception as e:
-            return JSONResponse(status_code=400, content={"error message": str(e)})
+            logger.error("Exception occurred: %s", traceback.format_exc())
+            return JSONResponse(status_code=500, content={"error message": "An internal error has occurred."})
     return JSONResponse(status_code=200, content=resp)
