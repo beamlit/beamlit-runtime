@@ -1,17 +1,16 @@
 import logging
 import requests
 from typing import Dict, Any, Optional, Union
-from diffusers import DiffusionPipeline
+from diffusers.pipelines.pipeline_utils import DiffusionPipeline
 from transformers import pipeline as transformers_pipeline, Pipeline
 import torch
-from api_models import Framework
-from typing import Optional
+from api_models import Framework, Task
 
 
 class Model:
-
-    pipeline: Optional[Union[DiffusionPipeline, Pipeline]] = None
+    pipeline: Optional[Union[Any, Pipeline]] = None
     framework: Optional[Framework] = None
+    task: Optional[Task] = None
     model_id: Optional[str] = None
     hf_api_token: Optional[str] = None
 
@@ -29,6 +28,12 @@ class Model:
         self.logger.info("Fetched model metadata (20%)")
 
         tags = metadata.get("tags", [])
+
+        try:
+            self.task = Task(metadata.get("pipeline_tag", None))
+        except ValueError as e:
+            self.logger.info(f"Error determining task: {e}, support might be limited")
+            self.task = None
 
         # Determine framework from tags
         if "transformers" in tags:
