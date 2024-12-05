@@ -6,6 +6,7 @@ from typing import Dict, Union, Any, Optional, List
 class Framework(Enum):
     TRANSFORMERS = "transformers"
     DIFFUSERS = "diffusers"
+    SENTENCE_TRANSFORMERS = "sentence-transformers"
 
 
 class Task(Enum):
@@ -13,5 +14,5 @@ class Task(Enum):
 
 
 class InferenceRequest(BaseModel):
-    inputs: Union[str, List[str], object]
+    inputs: Union[str, List[str], Dict[str, Any], object]
     parameters: Optional[Dict[str, Any]] = None

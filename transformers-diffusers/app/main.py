@@ -21,6 +21,7 @@ if __name__ == "__main__":
             "MODEL_ID must be defined in environment variables or arguments"
         )
     HF_API_TOKEN: Optional[str] = os.getenv("HF_API_TOKEN")
+    PORT = os.getenv("PORT", 80)
 
     logger = logging.getLogger(__name__)
     stream_handler = logging.StreamHandler(sys.stdout)
@@ -31,4 +32,5 @@ if __name__ == "__main__":
     except Exception as e:
         logger.error(f"Error loading model: {e}")
         raise
-    uvicorn.run(inference_server.app, host="0.0.0.0", port=80)
+
+    uvicorn.run(inference_server.app, host="0.0.0.0", port=int(PORT))
