@@ -17,11 +17,11 @@ app = FastAPI(
 
 model: Optional[Model] = None
 
-
-@app.get("/health")
+@app.get("/")
 def health():
-    return JSONResponse(status_code=200, content={"status": "ok"})
-
+  if not _is_model_ready():
+    return JSONResponse(status_code=400, content={"status": "unhealthy"})
+  return JSONResponse(status_code=200, content={"status": "healthy"})
 
 @app.post("/")
 def infer(request: InferenceRequest):
