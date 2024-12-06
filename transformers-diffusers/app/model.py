@@ -15,7 +15,15 @@ class Model:
     model_id: Optional[str] = None
     hf_api_token: Optional[str] = None
 
-    def __init__(
+    @classmethod
+    async def create(
+        cls, logger: logging.Logger, model_id: str, hf_api_token: Optional[str]
+    ):
+        self = cls()
+        await self._async_init(logger, model_id, hf_api_token)
+        return self
+
+    async def _async_init(
         self, logger: logging.Logger, model_id: str, hf_api_token: Optional[str]
     ):
         self.logger = logger
